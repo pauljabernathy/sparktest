@@ -26,6 +26,11 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.pauljabernathy</groupId>
+            <artifactId>Toolbox</artifactId>
+            <version>1.8.2</version>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

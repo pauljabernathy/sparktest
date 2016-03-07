@@ -10,6 +10,8 @@ import scala.Tuple2;
 import java.util.List;
 import java.util.ArrayList;
 
+import toolbox.random.*;
+
 /**
  * Created by pabernathy on 2/21/16.
  */
@@ -81,16 +83,13 @@ public class WordCount
         String inputFile = "README.md";
 		String outputFile = "output.txt";
 		JavaRDD<String> input = sc.textFile(inputFile);
-		JavaRDD<String> words = input.flatMap(new FlatMapFunction<String, String>()
-		{
-			public Iterable<String> call(String x)
-			{
+		JavaRDD<String> words = input.flatMap(new FlatMapFunction<String, String>() {
+			public Iterable<String> call(String x) {
 				return Arrays.asList(x.split(" "));
 			}
 		});
 
-		JavaPairRDD<String, Integer> counts = words.mapToPair(new PairFunction<String, String, Integer>()
-		{
+		JavaPairRDD<String, Integer> counts = words.mapToPair(new PairFunction<String, String, Integer>() {
 			public Tuple2<String, Integer> call(String x)
 			{
 				return new Tuple2(x, 1);
@@ -183,4 +182,9 @@ public class WordCount
             System.out.println("It was the correct size.");
         }
     }
+	
+	public void useOutsideJar() {
+		List<Double> r = Random.rnormList(1000, 0, 1);
+		JavaRDD<Double> rrdd = sc.parallelize(r);
+	}
 }
