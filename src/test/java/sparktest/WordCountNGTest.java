@@ -6,9 +6,11 @@
 package sparktest;
 
 import java.util.List;
+import java.util.ArrayList;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.JavaDoubleRDD;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -82,6 +84,19 @@ public class WordCountNGTest {
 		//assertEquals(1, MathUtil.sd(r));
 		System.out.println(MathUtil.sd(r));
 		assertEquals(MathUtil.sd(r), MathUtil.sd(rrdd.collect()));
+        
+        try {
+            List<List> data = new ArrayList<List>();
+            data.add(r);
+            toolbox.io.CSVWriter.writeColumnsToFile(data, "randomnums.csv", "num", ",");
+        } catch(java.io.IOException e) {
+            System.err.println(e.getClass() + " " + e.getMessage());
+        }
+        
+        JavaDoubleRDD drdd = rrdd.mapToDouble(d -> d);
+        assertEquals(MathUtil.mean(r), drdd.mean(), .00001);
+        //assertEquals(MathUtil.sd(r), drdd.stdev(), .000001);
+        assertEquals(MathUtil.mean(r), drdd.mean(), .000001);
 	}
     
 }
